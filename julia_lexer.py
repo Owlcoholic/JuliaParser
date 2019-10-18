@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import getopt, sys, enum
 
-# print usage heredoc
+# prints usage heredoc
 def usage():
 	print('''
 Usage: julia_lexer.py [ -o <OUTPUT_FILE> ] <SOURCE_FILE>...
-Outputs a human readable list of tokens to the standard output. Use option -o to
-output to a file instead.
+Tokenizes SOURCE_FILE... and outputs a human readable list of tokens to the
+standard output. Use option -o to output to OUTPUT_FILE.
 '''[1:-1])
 
 # returns True if lexeme is a single letter, or False otherwise
@@ -53,7 +53,7 @@ class TokenType(enum.Enum):
 	PAREN_CLOSE = 25
 	COLON       = 26
 
-	# returns name of constant for human readable printing
+	# returns the name of the enum constant
 	def __str__(self):
 		return self.name
 
@@ -118,7 +118,7 @@ class Token:
 			self.type = TokenType.INVAL.value
 			self.inval_lex = lex
 
-	# returns human readable token for printing
+	# returns human readable token
 	def __str__(self):
 		s = '<' + str(TokenType(self.type))
 		if self.type == TokenType.INVAL.value:
@@ -138,7 +138,7 @@ def tokenize(src):
 	return tokens
 
 def main():
-	# parse options
+	# get args
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], ':ho:')
 	except getopt.GetoptError as err:
@@ -146,6 +146,7 @@ def main():
 		usage()
 		sys.exit(1)
 
+	# handle opts
 	outfile = '\0'
 	for o, a in opts:
 		if o in ('-h'):
@@ -164,7 +165,7 @@ def main():
 		usage()
 		sys.exit(1)
 
-	# concat files into single string
+	# concat files into a string
 	src = ''
 	for a in args:
 		try:
@@ -180,9 +181,13 @@ def main():
 
 	# print token list
 	if outfile != '\0':
-		f = open(outfile, 'w+')
-		print(*tokens, sep=' ', file=f)
-		f.close()
+		try:
+			f = open(outfile, 'w+')
+			print(*tokens, sep=' ', file=f)
+			f.close()
+		except:
+			print('ERROR: can not write to file \'' + outfile + '\'')
+			sys.exit(1)
 	else:
 		print(*tokens, sep=' ')
 
