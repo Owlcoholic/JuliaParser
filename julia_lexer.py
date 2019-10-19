@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# Class:      CS 4308 Section 1
+# Term:       Fall 2019
+# Name:       Daniel Skinner, Samuel Wood, Aidan Murphy
+# Instructor: Deepa Muralidhar
+# Project:    Deliverable 1 Scanner - Python
+
 import getopt, sys, enum
 
 # prints usage heredoc
@@ -140,7 +147,7 @@ def tokenize(src):
 def main():
 	# get args
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], ':ho:')
+		opts, args = getopt.getopt(sys.argv[1:], 'ho:')
 	except getopt.GetoptError as err:
 		print('ERROR: ' + str(err) + '\n')
 		usage()
