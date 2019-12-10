@@ -6,13 +6,16 @@
 
 from enum import Enum, auto
 
+
 # returns Tok list from space delimited source code
 def tokenize(src):
 	toks = []
 	for lex in src.split():
 		t = Tok(lex)
 		toks.append(t)
+
 	return toks
+
 
 class TokType(Enum):
 
@@ -44,12 +47,14 @@ class TokType(Enum):
 	COLON       = auto()
 	INVAL       = auto()
 
+
 class Tok:
 
 	@staticmethod
 	def __is_id(lex):
 		if lex.isalpha() and len(lex) == 1:
 			return True
+
 		return False
 
 	@staticmethod
@@ -66,53 +71,53 @@ class Tok:
 			self.type = TokType.ID.value
 		elif Tok.__is_int(lex):
 			self.type = TokType.INT.value
-		elif lex in '=':
+		elif lex == '=':
 			self.type = TokType.OP_ASSIGN.value
-		elif lex in '<=':
+		elif lex == '<=':
 			self.type = TokType.OP_LE.value
-		elif lex in '<':
+		elif lex == '<':
 			self.type = TokType.OP_LT.value
-		elif lex in '>=':
+		elif lex == '>=':
 			self.type = TokType.OP_GE.value
-		elif lex in '>':
+		elif lex == '>':
 			self.type = TokType.OP_GT.value
-		elif lex in '==':
+		elif lex == '==':
 			self.type = TokType.OP_EQ.value
-		elif lex in '!=':
+		elif lex == '!=':
 			self.type = TokType.OP_NE.value
-		elif lex in '+':
+		elif lex == '+':
 			self.type = TokType.OP_ADD.value
-		elif lex in '-':
+		elif lex == '-':
 			self.type = TokType.OP_SUB.value
-		elif lex in '*':
+		elif lex == '*':
 			self.type = TokType.OP_MUL.value
-		elif lex in '/':
+		elif lex == '/':
 			self.type = TokType.OP_DIV.value
-		elif lex in '%':
+		elif lex == '%':
 			self.type = TokType.OP_MOD.value
-		elif lex in '\\':
+		elif lex == '\\':
 			self.type = TokType.OP_INV.value
-		elif lex in '^':
+		elif lex == '^':
 			self.type = TokType.OP_EXP.value
-		elif lex in 'function':
+		elif lex == 'function':
 			self.type = TokType.KEY_FUNC.value
-		elif lex in 'if':
+		elif lex == 'if':
 			self.type = TokType.KEY_IF.value
-		elif lex in 'else':
+		elif lex == 'else':
 			self.type = TokType.KEY_ELSE.value
-		elif lex in 'while':
+		elif lex == 'while':
 			self.type = TokType.KEY_WHILE.value
-		elif lex in 'for':
+		elif lex == 'for':
 			self.type = TokType.KEY_FOR.value
-		elif lex in 'end':
+		elif lex == 'end':
 			self.type = TokType.KEY_END.value
-		elif lex in 'print':
+		elif lex == 'print':
 			self.type = TokType.KEY_PRINT.value
-		elif lex in '(':
+		elif lex == '(':
 			self.type = TokType.PAREN_OPEN.value
-		elif lex in ')':
+		elif lex == ')':
 			self.type = TokType.PAREN_CLOSE.value
-		elif lex in ':':
+		elif lex == ':':
 			self.type = TokType.COLON.value
 		else:
 			self.type = TokType.INVAL.value
@@ -125,6 +130,7 @@ class Tok:
 				TokType.OP_GE.value, TokType.OP_GT.value, \
 				TokType.OP_EQ.value, TokType.OP_NE.value):
 			return True
+
 		return False
 
 	def is_arith_op(self):
@@ -136,4 +142,5 @@ class Tok:
 				TokType.OP_INV.value, \
 				TokType.OP_EXP.value):
 			return True
+
 		return False
