@@ -7,7 +7,7 @@
 from enum import Enum, auto
 
 
-# returns Tok list from space delimited source code
+# create token list from space delimited source code
 def tokenize(src):
 	toks = []
 	for lex in src.split():
@@ -50,6 +50,7 @@ class TokType(Enum):
 
 class Tok:
 
+	# return True if lexeme is a letter
 	@staticmethod
 	def __is_id(lex):
 		if lex.isalpha() and len(lex) == 1:
@@ -57,6 +58,7 @@ class Tok:
 
 		return False
 
+	# return True if lexeme is an integer
 	@staticmethod
 	def __is_int(lex):
 		try:
@@ -125,6 +127,7 @@ class Tok:
 	def __str__(self):
 		return self.lex
 
+	# return True if token is a relative operator
 	def is_rel_op(self):
 		if self.type in (TokType.OP_LE.value, TokType.OP_LT.value, \
 				TokType.OP_GE.value, TokType.OP_GT.value, \
@@ -133,6 +136,7 @@ class Tok:
 
 		return False
 
+	# return True if token is a binary operator
 	def is_bin_op(self):
 		if self.type in (TokType.OP_ADD.value, \
 				TokType.OP_SUB.value, \

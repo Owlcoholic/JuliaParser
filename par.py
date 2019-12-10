@@ -13,6 +13,7 @@ class Par:
 	def __init__(self, toks):
 		self.toks = toks
 
+	# parse and execute tokens
 	def exec(self):
 		self.mem = {}
 		self.__expect(0, TokType.KEY_FUNC.value)
@@ -21,6 +22,7 @@ class Par:
 		self.__expect(3, TokType.PAREN_CLOSE.value)
 		self.__expect(self.__parse_block(4, True), TokType.KEY_END.value)
 
+	# parse block and return new position
 	def __parse_block(self, pos, is_exec):
 		pos = self.__parse_stmt(pos, is_exec)
 		if pos < len(self.toks) and self.toks[pos].type in (TokType.ID.value, \
@@ -32,6 +34,7 @@ class Par:
 
 		return pos
 
+	# call __parse_stmt_*() based on first token
 	def __parse_stmt(self, pos, is_exec):
 		if pos >= len(self.toks):
 			self.__err(pos, 'expected statement')
@@ -49,6 +52,8 @@ class Par:
 
 		self.__err(pos, 'expected statement')
 
+	# parse assignment statement and return new position
+	# arithmetic expression is not assigned to identifier if is_exec is False
 	def __parse_stmt_assign(self, pos, is_exec):
 		self.__expect(pos, TokType.ID.value)
 		self.__expect(pos + 1, TokType.OP_ASSIGN.value)
@@ -60,6 +65,8 @@ class Par:
 
 		return pos
 
+	# parse if statement and return new position
+	# neither block is executed if is_exec is False
 	def __parse_stmt_if(self, pos, is_exec):
 		self.__expect(pos, TokType.KEY_IF.value)
 		stack = []
@@ -71,6 +78,8 @@ class Par:
 		self.__expect(pos, TokType.KEY_END.value)
 		return pos + 1
 
+	# parse while statement and return new position
+	# block is not executed or parsed more than once if is_exec is False
 	def __parse_stmt_while(self, pos, is_exec):
 		self.__expect(pos, TokType.KEY_WHILE.value)
 		bool_pos = pos + 1
@@ -85,6 +94,8 @@ class Par:
 		self.__expect(pos, TokType.KEY_END.value)
 		return pos + 1
 
+	# parse for statement and return new position
+	# block is not executed or parsed more than once if is_exec is False
 	def __parse_stmt_for(self, pos, is_exec):
 		self.__expect(pos, TokType.KEY_FOR.value)
 		self.__expect(pos + 1, TokType.ID.value)
@@ -104,6 +115,8 @@ class Par:
 		self.__expect(pos, TokType.KEY_END.value)
 		return pos + 1
 
+	# parse print statement and return new position
+	# arithmetic expression is not printed if is_exec is False
 	def __parse_stmt_print(self, pos, is_exec):
 		self.__expect(pos, TokType.KEY_PRINT.value)
 		self.__expect(pos + 1, TokType.PAREN_OPEN.value)
@@ -115,6 +128,8 @@ class Par:
 
 		return pos + 1
 
+	# parse boolean expression and return new position
+	# boolean expression is not evaluated if is_exec is False
 	def __parse_expr_bool(self, pos, stack, is_exec):
 		expr = []
 		try:
@@ -136,6 +151,8 @@ class Par:
 
 		return pos
 
+	# parse arithmetic expression and return new position
+	# arithmetic expression is not evaluated if is_exec is False
 	def __parse_expr_arith(self, pos, stack, is_exec):
 		expr = []
 		try:
@@ -156,6 +173,7 @@ class Par:
 
 		return pos
 
+	# evaluate prefix expression and push solution to stack
 	def __eval_expr(self, pos, stack, expr):
 		for t in reversed(expr):
 			if t.type == TokType.ID.value:
@@ -203,10 +221,12 @@ class Par:
 		if len(stack) != 1:
 			self.__err(pos, 'invalid expression')
 
+	# exit with non-zero exit status and print error message with context
 	def __err(self, pos, msg):
-		print('ERROR: ' + msg + ' @ ...', *self.toks[pos: pos + 2], '...', sep=' ')
+		print('ERROR: ' + msg + ' @', *self.toks[pos: pos + 5], '...', sep=' ')
 		sys.exit(1)
 
+	# assert expected token type at given position
 	def __expect(self, pos, type):
 		if pos >= len(self.toks) or self.toks[pos].type != type:
 			self.__err(pos, 'expected token ' + TokType(type).name)
