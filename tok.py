@@ -133,7 +133,7 @@ class Tok:
 
 		return False
 
-	def is_arith_op(self):
+	def is_bin_op(self):
 		if self.type in (TokType.OP_ADD.value, \
 				TokType.OP_SUB.value, \
 				TokType.OP_MUL.value, \
