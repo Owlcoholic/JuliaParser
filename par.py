@@ -223,7 +223,7 @@ class Par:
 
 	# exit with non-zero exit status and print error message with context
 	def __err(self, pos, msg):
-		print('ERROR: ' + msg + ' @', *self.toks[pos: pos + 5], '...', sep=' ')
+		print('ERROR: ' + msg + ' @ "', *self.toks[pos - 1: pos + 5], '... "', sep=' ')
 		sys.exit(1)
 
 	# assert expected token type at given position
